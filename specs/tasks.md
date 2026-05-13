@@ -13,6 +13,7 @@
 - [ ] **B3** — Definir e armazenar `X-Api-Key` (mesma chave usada por Bridge ↔ CIOT API ↔ TMS). Gerar via `RandomNumberGenerator` (32 bytes Base64).
 - [ ] **B4** — Criar `dbo.LEGACY_BRIDGE_PROCESSED` em DEV/HML/PRD legado (DDL §4.1 da architecture).
 - [ ] **B5** — Congelar payload `Ciot.Emitido` v1 lado CIOT-API: adicionar `schemaVersion: 1` em `InsertFreightContractCommandHandler` antes de chamar `IOutboxService.EnqueueAsync`.
+- [ ] **B6** — **Mapeamento `Ciot.Emitido` payload v1 → tabelas legadas existentes.** Decidido em 2026-05-13 que **não** vamos criar `CIOT_EMISSAO` / `CIOT_PARCELAS` novas. Outbox handler precisa adaptar para tabelas reais (candidatos prováveis em `bd_fin_zenatur`: `tb_contrato`, `tb_nota_fiscal_parcela`, `tb_parcela_despesas`; mais `bd_sap.fornecedor` p/ resolver `cod_forn` por documento). Sem esse mapeamento Fase 6 (L30-L36) fica bloqueada — `LEGACY_BRIDGE_PROCESSED` segue sendo única tabela nova.
 
 ---
 
@@ -71,6 +72,8 @@
 ---
 
 ## Fase 6 — Persistência Sync (Ciot.Emitido v1)
+
+> **🚧 BLOQUEADA pendente B6** (mapeamento payload → tabelas legadas existentes). Decisão 2026-05-13: não criar CIOT_EMISSAO/CIOT_PARCELAS, adaptar para tabelas reais já em uso na Zenatur. Quando mapa chegar, revisar L30/L31/L33 (DTO/SQL/Mapper) antes de implementar.
 
 - [ ] **L30** — Port `ILegacyCiotRepository` (`UpsertCiotEmitidoAsync(payload, IDbTransaction)`, `InsertParcelasAsync(...)`).
 - [ ] **L31** — `LegacyCiotRepository` Dapper + SQL embed: `insert_ciot_emissao.sql`, `insert_ciot_parcelas.sql`, `upsert_dedupe.sql`. Datas UTC → `E. South America Standard Time` (helper). Decimais `DbType.Decimal(18,2)`.
