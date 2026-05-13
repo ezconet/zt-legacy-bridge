@@ -52,7 +52,7 @@
 - [x] **L17** — Port `IVeiculoRepository` + DTO `VeiculoDto` (placa, tipoVeiculo, renavam, anoFabricacao, anoModelo, marca, modelo, tara, capacidadeKg, proprietario{}).
 - [x] **L18** — `VeiculoRepository` Dapper + SQL `Sql/veiculo_by_placa.sql` `WITH (NOLOCK)` + retry Polly.
 - [x] **L19** — `GetVeiculoByPlacaQuery` + Handler: normaliza placa (uppercase, sem hífen, valida Mercosul ou antigo).
-- [ ] **L20** — `VeiculosEndpoints` com `GET /v1/legacy/veiculos/{placa}`: 200/404/503.
+- [x] **L20** — `VeiculosEndpoints` com `GET /v1/legacy/veiculos/{placa}`: 200/404/503.
 - [ ] **L21** — Unit + integration tests.
 
 ---

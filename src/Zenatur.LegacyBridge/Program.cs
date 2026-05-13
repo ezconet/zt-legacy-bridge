@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Formatting.Compact;
 using Zenatur.LegacyBridge.Application.Common;
 using Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
+using Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca;
 using Zenatur.LegacyBridge.Endpoints;
 using Zenatur.LegacyBridge.Infrastructure;
 using Zenatur.LegacyBridge.Logging;
@@ -30,6 +31,7 @@ try
 
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddScoped<GetMotoristaByCpfHandler>();
+    builder.Services.AddScoped<GetVeiculoByPlacaHandler>();
 
     var app = builder.Build();
 
@@ -53,6 +55,7 @@ try
     app.MapHealthChecks("/health/ready");
 
     app.MapMotoristasEndpoints();
+    app.MapVeiculosEndpoints();
 
     if (app.Environment.IsEnvironment("Testing"))
     {
