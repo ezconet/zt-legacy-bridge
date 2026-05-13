@@ -2,7 +2,7 @@ namespace Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca;
 
 public sealed record VeiculoDto(
     string Placa,
-    int? TipoVeiculo,
+    TipoVeiculoDto? TipoVeiculo,
     string? Renavam,
     int? AnoFabricacao,
     int? AnoModelo,
@@ -10,7 +10,12 @@ public sealed record VeiculoDto(
     string? Modelo,
     decimal? Tara,
     decimal? CapacidadeKg,
+    string? Rntrc,
     ProprietarioDto? Proprietario);
+
+public sealed record TipoVeiculoDto(
+    int Id,
+    string? Descricao);
 
 public sealed record ProprietarioDto(
     string Documento,

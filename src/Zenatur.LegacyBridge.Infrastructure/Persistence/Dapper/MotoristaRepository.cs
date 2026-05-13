@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Zenatur.LegacyBridge.Application.Common;
 using Zenatur.LegacyBridge.Application.Ports;
 using Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
+using Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca;
 
 namespace Zenatur.LegacyBridge.Infrastructure.Persistence.Dapper;
 
@@ -41,7 +42,7 @@ public sealed class MotoristaRepository : IMotoristaRepository
                     return Result.Ok<MotoristaDto?>(null);
                 }
 
-                var veiculoRows = await multi.ReadAsync<VeiculoRow>();
+                var veiculoRows = await multi.ReadAsync<VeiculoRepository.VeiculoRow>();
                 return Result.Ok<MotoristaDto?>(motoristaRow.ToDto(veiculoRows));
             }, ct);
         }
@@ -67,7 +68,7 @@ public sealed class MotoristaRepository : IMotoristaRepository
         public string? Cep { get; set; }
         public DateTime? AnttValidade { get; set; }
 
-        public MotoristaDto ToDto(IEnumerable<VeiculoRow> veiculos) => new(
+        public MotoristaDto ToDto(IEnumerable<VeiculoRepository.VeiculoRow> veiculos) => new(
             Cpf: Cpf,
             Nome: Nome,
             DataNascimento: DataNascimento.HasValue ? DateOnly.FromDateTime(DataNascimento.Value) : null,
@@ -76,7 +77,7 @@ public sealed class MotoristaRepository : IMotoristaRepository
                 ? new EnderecoDto(Logradouro, Numero, Complemento, Bairro, CidadeIbge, Uf, Cep)
                 : null,
             AnttValidade: AnttValidade.HasValue ? DateOnly.FromDateTime(AnttValidade.Value) : null,
-            Veiculos: veiculos.Select(v => v.ToDto()).ToList());
+            Veiculos: veiculos.Select(v => v.ToDto(includeProprietario: false)).ToList());
 
         private bool HasAnyAddressField() =>
             !string.IsNullOrWhiteSpace(Logradouro) ||
@@ -86,29 +87,5 @@ public sealed class MotoristaRepository : IMotoristaRepository
             !string.IsNullOrWhiteSpace(CidadeIbge) ||
             !string.IsNullOrWhiteSpace(Uf) ||
             !string.IsNullOrWhiteSpace(Cep);
-    }
-
-    private sealed class VeiculoRow
-    {
-        public string Placa { get; set; } = "";
-        public int? TipoVeiculo { get; set; }
-        public string? Renavam { get; set; }
-        public int? Ano { get; set; }
-        public string? Marca { get; set; }
-        public string? Modelo { get; set; }
-        public double? Tara { get; set; }
-        public double? CapacidadeKg { get; set; }
-        public string? Rntrc { get; set; }
-
-        public VeiculoMotoristaDto ToDto() => new(
-            Placa: Placa,
-            TipoVeiculo: TipoVeiculo,
-            Renavam: Renavam,
-            Ano: Ano,
-            Marca: Marca,
-            Modelo: Modelo,
-            Tara: Tara is null ? null : (decimal)Tara.Value,
-            CapacidadeKg: CapacidadeKg is null ? null : (decimal)CapacidadeKg.Value,
-            Rntrc: Rntrc);
     }
 }

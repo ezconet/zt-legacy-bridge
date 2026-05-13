@@ -34,7 +34,7 @@ public sealed class VeiculoRepository : IVeiculoRepository
                         new { placa },
                         commandTimeout: _factory.CommandTimeoutSeconds,
                         cancellationToken: token));
-                return Result.Ok<VeiculoDto?>(row?.ToDto());
+                return Result.Ok<VeiculoDto?>(row?.ToDto(includeProprietario: true));
             }, ct);
         }
         catch (SqlException ex)
@@ -44,10 +44,11 @@ public sealed class VeiculoRepository : IVeiculoRepository
         }
     }
 
-    private sealed class VeiculoRow
+    internal sealed class VeiculoRow
     {
         public string Placa { get; set; } = "";
-        public int? TipoVeiculo { get; set; }
+        public int? TipoVeiculoId { get; set; }
+        public string? TipoVeiculoDescricao { get; set; }
         public string? Renavam { get; set; }
         public int? AnoFabricacao { get; set; }
         public int? AnoModelo { get; set; }
@@ -55,13 +56,16 @@ public sealed class VeiculoRepository : IVeiculoRepository
         public string? Modelo { get; set; }
         public double? Tara { get; set; }
         public double? CapacidadeKg { get; set; }
+        public string? Rntrc { get; set; }
         public string? PropDocumento { get; set; }
         public string? PropNome { get; set; }
         public string? PropTipoDocumento { get; set; }
 
-        public VeiculoDto ToDto() => new(
+        public VeiculoDto ToDto(bool includeProprietario) => new(
             Placa: Placa,
-            TipoVeiculo: TipoVeiculo,
+            TipoVeiculo: TipoVeiculoId.HasValue
+                ? new TipoVeiculoDto(TipoVeiculoId.Value, TipoVeiculoDescricao)
+                : null,
             Renavam: Renavam,
             AnoFabricacao: AnoFabricacao,
             AnoModelo: AnoModelo,
@@ -69,7 +73,10 @@ public sealed class VeiculoRepository : IVeiculoRepository
             Modelo: Modelo,
             Tara: Tara is null ? null : (decimal)Tara.Value,
             CapacidadeKg: CapacidadeKg is null ? null : (decimal)CapacidadeKg.Value,
-            Proprietario: !string.IsNullOrWhiteSpace(PropDocumento) && !string.IsNullOrWhiteSpace(PropNome)
+            Rntrc: Rntrc,
+            Proprietario: includeProprietario
+                          && !string.IsNullOrWhiteSpace(PropDocumento)
+                          && !string.IsNullOrWhiteSpace(PropNome)
                 ? new ProprietarioDto(PropDocumento, PropTipoDocumento ?? "CPF", PropNome)
                 : null);
     }

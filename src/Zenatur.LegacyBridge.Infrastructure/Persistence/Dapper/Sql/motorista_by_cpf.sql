@@ -24,13 +24,16 @@ WHERE f.cod_forn = @CodForn;
 
 SELECT
     v.placa                             AS Placa,
-    v.idTipo                            AS TipoVeiculo,
+    v.idTipo                            AS TipoVeiculoId,
+    t.Descricao                         AS TipoVeiculoDescricao,
     v.renavam                           AS Renavam,
-    v.ano                               AS Ano,
+    v.ano                               AS AnoFabricacao,
+    v.ano                               AS AnoModelo,
     v.marca                             AS Marca,
     v.modelo                            AS Modelo,
     v.tara                              AS Tara,
     v.pesoReal                          AS CapacidadeKg,
     v.rntrc                             AS Rntrc
 FROM dbo.TB_DadosVeiculo v WITH (NOLOCK)
+LEFT JOIN [DB_WMS].dbo.TB_REC_Veiculos t WITH (NOLOCK) ON t.idVeiculo = v.idTipo
 WHERE v.cod_forn = @CodForn;

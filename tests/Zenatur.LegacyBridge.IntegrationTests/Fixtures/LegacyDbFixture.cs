@@ -57,6 +57,15 @@ public sealed class LegacyDbFixture : IAsyncLifetime
         await using var conn = new SqlConnection(connStr);
         await conn.OpenAsync();
 
+        await conn.ExecuteAsync("CREATE DATABASE DB_WMS;");
+        await conn.ExecuteAsync(@"
+            CREATE TABLE [DB_WMS].dbo.TB_REC_Veiculos (
+                idVeiculo INT          NOT NULL PRIMARY KEY,
+                Descricao VARCHAR(50)  NULL
+            );
+            INSERT INTO [DB_WMS].dbo.TB_REC_Veiculos (idVeiculo, Descricao)
+            VALUES (1, 'CAMINHAO 3/4'), (2, 'TRUCK / TOCO');");
+
         await conn.ExecuteAsync(@"
             CREATE TABLE dbo.fornecedor (
                 cod_forn       INT             NOT NULL PRIMARY KEY,

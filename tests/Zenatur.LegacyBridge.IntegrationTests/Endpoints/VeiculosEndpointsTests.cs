@@ -22,6 +22,9 @@ public class VeiculosEndpointsTests
         var body = await resp.Content.ReadAsStringAsync();
         Assert.Contains("\"placa\":\"ABC1D23\"", body);
         Assert.Contains("\"marca\":\"VOLVO\"", body);
+        Assert.Contains("\"tipoVeiculo\"", body);
+        Assert.Contains("\"id\":1", body);
+        Assert.Contains("\"descricao\":\"CAMINHAO 3/4\"", body);
         Assert.Contains("\"proprietario\"", body);
         Assert.Contains("\"tipoDocumento\":\"CPF\"", body);
         Assert.Contains("\"documento\":\"12345678901\"", body);
@@ -30,12 +33,13 @@ public class VeiculosEndpointsTests
     [Fact]
     public async Task Returns_200_When_Stored_Placa_Has_Hyphen()
     {
-        // Real legacy data uses 'XYZ-9876' (with hyphen). Caller normalises to 'XYZ9876'.
         var resp = await _fixture.AuthorizedClient().GetAsync("/v1/legacy/veiculos/XYZ9876");
 
         Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
         var body = await resp.Content.ReadAsStringAsync();
         Assert.Contains("\"marca\":\"SCANIA\"", body);
+        Assert.Contains("\"id\":2", body);
+        Assert.Contains("\"descricao\":\"TRUCK / TOCO\"", body);
         Assert.Contains("\"tipoDocumento\":\"CNPJ\"", body);
         Assert.Contains("\"documento\":\"12345678000199\"", body);
     }

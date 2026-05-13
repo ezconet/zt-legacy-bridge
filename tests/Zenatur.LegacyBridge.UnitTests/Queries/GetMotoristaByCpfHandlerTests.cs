@@ -16,7 +16,7 @@ public class GetMotoristaByCpfHandlerTests
         Telefone: "11999998888",
         Endereco: null,
         AnttValidade: new DateOnly(2027, 1, 31),
-        Veiculos: new List<VeiculoMotoristaDto>());
+        Veiculos: new List<Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca.VeiculoDto>());
 
     [Fact]
     public async Task Sanitizes_Cpf_Stripping_Mask_And_Letters_Before_Repo_Call()

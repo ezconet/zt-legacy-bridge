@@ -11,7 +11,7 @@ public class GetVeiculoByPlacaHandlerTests
 {
     private static readonly VeiculoDto Sample = new(
         Placa: "ABC1D23",
-        TipoVeiculo: 1,
+        TipoVeiculo: new TipoVeiculoDto(1, "CAMINHAO 3/4"),
         Renavam: "00123456789",
         AnoFabricacao: 2018,
         AnoModelo: 2018,
@@ -19,6 +19,7 @@ public class GetVeiculoByPlacaHandlerTests
         Modelo: "FH 540",
         Tara: 8500m,
         CapacidadeKg: 25000m,
+        Rntrc: "12345678",
         Proprietario: new ProprietarioDto("12345678000199", "CNPJ", "TRANSPORTES X LTDA"));
 
     private static (Mock<IVeiculoRepository>, GetVeiculoByPlacaHandler) Build(Result<VeiculoDto?>? result = null)

@@ -27,6 +27,9 @@ public class MotoristasEndpointsTests
         Assert.Contains("\"veiculos\"", body);
         Assert.Contains("\"placa\":\"ABC1D23\"", body);
         Assert.Contains("\"marca\":\"VOLVO\"", body);
+        Assert.Contains("\"descricao\":\"CAMINHAO 3/4\"", body);
+        // Vehicles inside motorista response do not echo proprietario (motorista IS proprietario).
+        Assert.DoesNotContain("\"proprietario\":{", body);
     }
 
     [Fact]

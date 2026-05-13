@@ -1,3 +1,5 @@
+using Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca;
+
 namespace Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
 
 public sealed record MotoristaDto(
@@ -7,7 +9,7 @@ public sealed record MotoristaDto(
     string? Telefone,
     EnderecoDto? Endereco,
     DateOnly? AnttValidade,
-    IReadOnlyList<VeiculoMotoristaDto> Veiculos);
+    IReadOnlyList<VeiculoDto> Veiculos);
 
 public sealed record EnderecoDto(
     string? Logradouro,
@@ -17,14 +19,3 @@ public sealed record EnderecoDto(
     string? CidadeIbge,
     string? Uf,
     string? Cep);
-
-public sealed record VeiculoMotoristaDto(
-    string Placa,
-    int? TipoVeiculo,
-    string? Renavam,
-    int? Ano,
-    string? Marca,
-    string? Modelo,
-    decimal? Tara,
-    decimal? CapacidadeKg,
-    string? Rntrc);
