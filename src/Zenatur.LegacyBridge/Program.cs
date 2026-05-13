@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Formatting.Compact;
+using Zenatur.LegacyBridge.Middleware;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -21,6 +22,10 @@ try
     var app = builder.Build();
 
     app.UseSerilogRequestLogging();
+
+    app.UseWhen(
+        ctx => !ctx.Request.Path.StartsWithSegments("/health"),
+        branch => branch.UseMiddleware<ApiKeyMiddleware>());
 
     app.MapHealthChecks("/health/live", new HealthCheckOptions
     {
