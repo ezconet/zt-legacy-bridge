@@ -48,34 +48,50 @@ public class MotoristasEndpointsTests : IAsyncLifetime
         await conn.OpenAsync();
 
         await conn.ExecuteAsync(@"
-            CREATE TABLE dbo.MOTORISTAS (
-                NR_CPF        VARCHAR(11)   NOT NULL PRIMARY KEY,
-                NM_MOT        NVARCHAR(200) NOT NULL,
-                DT_NASC       DATE          NULL,
-                NR_TELEFONE   VARCHAR(20)   NULL,
-                DS_LOGRADOURO NVARCHAR(200) NULL,
-                NR_ENDERECO   VARCHAR(20)   NULL,
-                DS_COMPL      NVARCHAR(100) NULL,
-                DS_BAIRRO     NVARCHAR(100) NULL,
-                CD_IBGE       VARCHAR(7)    NULL,
-                SG_UF         CHAR(2)       NULL,
-                NR_CEP        VARCHAR(8)    NULL,
-                NR_RNTRC      VARCHAR(8)    NULL,
-                FL_RNTRC_ATIVO BIT          NULL,
-                DT_RNTRC_VAL  DATE          NULL
+            CREATE TABLE dbo.fornecedor (
+                cod_forn       INT             NOT NULL PRIMARY KEY,
+                nome_forn      NVARCHAR(1000)  NOT NULL,
+                endereco_forn  NVARCHAR(100)   NULL,
+                bairro_forn    NVARCHAR(100)   NULL,
+                cidade_forn    NVARCHAR(100)   NULL,
+                uf_forn        NVARCHAR(4)     NULL,
+                cgc_forn       NVARCHAR(40)    NULL,
+                cep_forn       NVARCHAR(20)    NULL,
+                tel1_forn      NVARCHAR(40)    NULL,
+                dt_antt        SMALLDATETIME   NULL
+            );
+            CREATE TABLE dbo.TB_DocumentoMotorista (
+                cod_forn  INT          NOT NULL PRIMARY KEY,
+                cpf       VARCHAR(11)  NULL
+            );
+            CREATE TABLE dbo.TB_DadosVeiculo (
+                cod_forn  INT           NOT NULL PRIMARY KEY,
+                placa     VARCHAR(30)   NOT NULL,
+                rntrc     VARCHAR(8)    NULL,
+                idTipo    INT           NULL,
+                ano       INT           NULL,
+                marca     VARCHAR(30)   NULL,
+                modelo    VARCHAR(30)   NULL,
+                tara      FLOAT         NULL,
+                pesoReal  FLOAT         NULL,
+                renavam   VARCHAR(11)   NULL
             );");
 
         await conn.ExecuteAsync(@"
-            INSERT INTO dbo.MOTORISTAS
-                (NR_CPF, NM_MOT, DT_NASC, NR_TELEFONE,
-                 DS_LOGRADOURO, NR_ENDERECO, DS_BAIRRO,
-                 CD_IBGE, SG_UF, NR_CEP,
-                 NR_RNTRC, FL_RNTRC_ATIVO, DT_RNTRC_VAL)
+            INSERT INTO dbo.fornecedor
+                (cod_forn, nome_forn, endereco_forn, bairro_forn, uf_forn,
+                 cgc_forn, cep_forn, tel1_forn, dt_antt)
             VALUES
-                ('12345678901', 'JOAO DA SILVA', '1980-03-15', '11999998888',
-                 'RUA X', '100', 'CENTRO',
-                 '3550308', 'SP', '01310100',
-                 '12345678', 1, '2027-01-31');");
+                (1, 'JOAO DA SILVA', 'RUA X, 100', 'CENTRO', 'SP',
+                 '12345678901', '01310100', '11999998888', '2027-01-31');
+
+            INSERT INTO dbo.TB_DocumentoMotorista (cod_forn, cpf)
+            VALUES (1, '12345678901');
+
+            INSERT INTO dbo.TB_DadosVeiculo
+                (cod_forn, placa, rntrc, idTipo, ano, marca, modelo, tara, pesoReal, renavam)
+            VALUES
+                (1, 'ABC1D23', '12345678', 1, 2018, 'VOLVO', 'FH 540', 8500, 25000, '00123456789');");
     }
 
     private HttpClient AuthorizedClient()

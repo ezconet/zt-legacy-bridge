@@ -8,8 +8,8 @@
 
 ## Fase 0 — Bloqueantes (input externo)
 
-- [ ] **B1** — Inventário schema legado: `MOTORISTAS`, `VEICULOS`, `PROPRIETARIOS`, `CIOT_EMISSAO`, `CIOT_PARCELAS` (nomes reais, colunas, PKs, índices). Sem isso, repos Dapper são chute.
-- [ ] **B2** — Connection string DEV do SQL Server legado.
+- [~] **B1** — Inventário schema legado: `MOTORISTAS`, `VEICULOS`, `PROPRIETARIOS`, `CIOT_EMISSAO`, `CIOT_PARCELAS` (nomes reais, colunas, PKs, índices). Sem isso, repos Dapper são chute. **Em andamento:** `dbo.fornecedor` + `dbo.TB_DocumentoMotorista` + `dbo.TB_DadosVeiculo` mapeados via `specs/legacy-database-schemas.md`. Faltam tabelas CIOT (Fase 6).
+- [x] **B2** — Connection string DEV do SQL Server legado. (HML `10.10.0.4 / DB_SAP`, ZenAdmin auth — armazenada local em `appsettings.Local.json` gitignored.)
 - [ ] **B3** — Definir e armazenar `X-Api-Key` (mesma chave usada por Bridge ↔ CIOT API ↔ TMS). Gerar via `RandomNumberGenerator` (32 bytes Base64).
 - [ ] **B4** — Criar `dbo.LEGACY_BRIDGE_PROCESSED` em DEV/HML/PRD legado (DDL §4.1 da architecture).
 - [ ] **B5** — Congelar payload `Ciot.Emitido` v1 lado CIOT-API: adicionar `schemaVersion: 1` em `InsertFreightContractCommandHandler` antes de chamar `IOutboxService.EnqueueAsync`.

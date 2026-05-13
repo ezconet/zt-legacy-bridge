@@ -26,6 +26,7 @@ logs/
 
 ## Secrets
 appsettings.Production.json
+appsettings.Local.json
 appsettings.*.local.json
 secrets.json
 .env

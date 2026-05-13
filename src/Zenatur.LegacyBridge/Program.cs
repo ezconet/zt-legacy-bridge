@@ -18,6 +18,8 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
+
     builder.Host.UseWindowsService(o => o.ServiceName = "ZenaturLegacyBridge");
 
     builder.Host.UseSerilog((ctx, _, cfg) => cfg
