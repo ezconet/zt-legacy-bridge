@@ -66,7 +66,7 @@
 - [x] **L26** — `OutboxDispatcher` em Application/Dispatching: dicionário `MessageType → Handler`, valida `schemaVersion` do payload, retorna Fail em handler ausente / versão errada.
 - [x] **L27** — `CiotEmitidoHandler` stub: retorna `Result.Ok()` (no-op) — só pra fechar loop.
 - [x] **L28** — `OutboxPollingWorker : BackgroundService`: loop conforme §7.1 (poll → dispatch → ack). Configs `BatchSize`, `PollIntervalIdleMs`, `PollIntervalBusyMs`, `BackoffMsOnFailure` da seção `CiotApi`.
-- [ ] **L29** — Unit tests: `OutboxDispatcher` (tipo desconhecido, versão errada, success/fail). `CiotApiClient` com `HttpMessageHandler` mock (200/401/500/timeout/retry exhaustion).
+- [x] **L29** — Unit tests: `OutboxDispatcher` (tipo desconhecido, versão errada, success/fail). `CiotApiClient` com `HttpMessageHandler` mock (200/401/500/timeout/retry exhaustion).
 
 ---
 

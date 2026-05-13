@@ -14,7 +14,7 @@ public sealed class CiotApiClient : ICiotApiClient
 {
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
 
-    private static readonly ResiliencePipeline<HttpResponseMessage> Pipeline =
+    public static readonly ResiliencePipeline<HttpResponseMessage> DefaultPipeline =
         new ResiliencePipelineBuilder<HttpResponseMessage>()
             .AddRetry(new RetryStrategyOptions<HttpResponseMessage>
             {
@@ -41,18 +41,28 @@ public sealed class CiotApiClient : ICiotApiClient
 
     private readonly HttpClient _http;
     private readonly ILogger<CiotApiClient> _logger;
+    private readonly ResiliencePipeline<HttpResponseMessage> _pipeline;
 
     public CiotApiClient(HttpClient http, ILogger<CiotApiClient> logger)
+        : this(http, logger, DefaultPipeline)
+    {
+    }
+
+    public CiotApiClient(
+        HttpClient http,
+        ILogger<CiotApiClient> logger,
+        ResiliencePipeline<HttpResponseMessage> pipeline)
     {
         _http = http;
         _logger = logger;
+        _pipeline = pipeline;
     }
 
     public async Task<Result<IReadOnlyList<OutboxMessageDto>>> GetPendingAsync(int size, CancellationToken ct)
     {
         try
         {
-            var resp = await Pipeline.ExecuteAsync(
+            var resp = await _pipeline.ExecuteAsync(
                 async token => await _http.GetAsync($"/api/v1/outbox/pending?size={size}", token),
                 ct);
 
@@ -86,7 +96,7 @@ public sealed class CiotApiClient : ICiotApiClient
     {
         try
         {
-            var resp = await Pipeline.ExecuteAsync(async token =>
+            var resp = await _pipeline.ExecuteAsync(async token =>
             {
                 using var content = JsonContent.Create(request, options: JsonOpts);
                 return await _http.PostAsync("/api/v1/outbox/ack", content, token);
