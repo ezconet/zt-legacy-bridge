@@ -20,4 +20,10 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Zenatur.LegacyBridge\Zenatur.LegacyBridge.csproj" />
+    <ProjectReference Include="..\..\src\Zenatur.LegacyBridge.Application\Zenatur.LegacyBridge.Application.csproj" />
+    <ProjectReference Include="..\..\src\Zenatur.LegacyBridge.Infrastructure\Zenatur.LegacyBridge.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
