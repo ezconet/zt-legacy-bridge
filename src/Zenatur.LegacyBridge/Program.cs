@@ -2,12 +2,16 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Zenatur.LegacyBridge.Application.Common;
+using Zenatur.LegacyBridge.Application.Dispatching;
+using Zenatur.LegacyBridge.Application.OutboxHandlers.CiotEmitido;
+using Zenatur.LegacyBridge.Application.Ports;
 using Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
 using Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca;
 using Zenatur.LegacyBridge.Endpoints;
 using Zenatur.LegacyBridge.Infrastructure;
 using Zenatur.LegacyBridge.Logging;
 using Zenatur.LegacyBridge.Middleware;
+using Zenatur.LegacyBridge.Workers;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -32,6 +36,10 @@ try
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddScoped<GetMotoristaByCpfHandler>();
     builder.Services.AddScoped<GetVeiculoByPlacaHandler>();
+
+    builder.Services.AddScoped<IOutboxDispatcher, OutboxDispatcher>();
+    builder.Services.AddScoped<IOutboxMessageHandler, CiotEmitidoHandler>();
+    builder.Services.AddHostedService<OutboxPollingWorker>();
 
     var app = builder.Build();
 
