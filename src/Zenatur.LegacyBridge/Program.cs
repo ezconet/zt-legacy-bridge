@@ -14,15 +14,7 @@ try
 
     builder.Host.UseWindowsService(o => o.ServiceName = "ZenaturLegacyBridge");
 
-    builder.Host.UseSerilog((ctx, _, cfg) => cfg
-        .ReadFrom.Configuration(ctx.Configuration)
-        .Enrich.FromLogContext()
-        .WriteTo.Console(new CompactJsonFormatter())
-        .WriteTo.File(
-            new CompactJsonFormatter(),
-            "logs/bridge-.log",
-            rollingInterval: RollingInterval.Day,
-            retainedFileCountLimit: 30));
+    builder.Host.UseSerilog((ctx, _, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
 
     builder.Services.AddHealthChecks();
 
