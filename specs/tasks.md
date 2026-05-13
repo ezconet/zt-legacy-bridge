@@ -63,7 +63,7 @@
 - [x] **L23** — `CiotApiClient` em Infrastructure/Http: `HttpClientFactory` tipado + `ApiKeyDelegatingHandler` (injeta `X-Api-Key` outbound) + Polly retry 3x (1s/2s/4s) + circuit breaker + timeout 30s.
 - [x] **L24** — `OutboxMessageDto` + `AckRequest` em Application/Common (espelha contratos `outbox-sql.md`).
 - [x] **L25** — Port `IOutboxMessageHandler` (`MessageType`, `SupportedSchemaVersion`, `HandleAsync`).
-- [ ] **L26** — `OutboxDispatcher` em Application/Dispatching: dicionário `MessageType → Handler`, valida `schemaVersion` do payload, retorna Fail em handler ausente / versão errada.
+- [x] **L26** — `OutboxDispatcher` em Application/Dispatching: dicionário `MessageType → Handler`, valida `schemaVersion` do payload, retorna Fail em handler ausente / versão errada.
 - [ ] **L27** — `CiotEmitidoHandler` stub: retorna `Result.Ok()` (no-op) — só pra fechar loop.
 - [ ] **L28** — `OutboxPollingWorker : BackgroundService`: loop conforme §7.1 (poll → dispatch → ack). Configs `BatchSize`, `PollIntervalIdleMs`, `PollIntervalBusyMs`, `BackoffMsOnFailure` da seção `CiotApi`.
 - [ ] **L29** — Unit tests: `OutboxDispatcher` (tipo desconhecido, versão errada, success/fail). `CiotApiClient` com `HttpMessageHandler` mock (200/401/500/timeout/retry exhaustion).
