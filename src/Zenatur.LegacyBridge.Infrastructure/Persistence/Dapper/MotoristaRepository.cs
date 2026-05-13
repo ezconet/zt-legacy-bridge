@@ -2,6 +2,7 @@ using Dapper;
 using FluentResults;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using Zenatur.LegacyBridge.Application.Common;
 using Zenatur.LegacyBridge.Application.Ports;
 using Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
 
@@ -39,7 +40,7 @@ public sealed class MotoristaRepository : IMotoristaRepository
         catch (SqlException ex)
         {
             _logger.LogError(ex, "LegacyDbUnreachable on motorista lookup");
-            return Result.Fail(new Error("LegacyDbUnreachable").CausedBy(ex));
+            return Result.Fail(new InfraError("LegacyDbUnreachable").CausedBy(ex));
         }
     }
 
