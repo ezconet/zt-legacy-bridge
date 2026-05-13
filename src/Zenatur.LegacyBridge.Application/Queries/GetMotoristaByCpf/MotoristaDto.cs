@@ -6,7 +6,8 @@ public sealed record MotoristaDto(
     DateOnly? DataNascimento,
     string? Telefone,
     EnderecoDto? Endereco,
-    RntrcDto? Rntrc);
+    DateOnly? AnttValidade,
+    IReadOnlyList<VeiculoMotoristaDto> Veiculos);
 
 public sealed record EnderecoDto(
     string? Logradouro,
@@ -17,7 +18,13 @@ public sealed record EnderecoDto(
     string? Uf,
     string? Cep);
 
-public sealed record RntrcDto(
-    string? Numero,
-    bool? Ativo,
-    DateOnly? Validade);
+public sealed record VeiculoMotoristaDto(
+    string Placa,
+    int? TipoVeiculo,
+    string? Renavam,
+    int? Ano,
+    string? Marca,
+    string? Modelo,
+    decimal? Tara,
+    decimal? CapacidadeKg,
+    string? Rntrc);

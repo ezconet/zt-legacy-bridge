@@ -15,7 +15,8 @@ public class GetMotoristaByCpfHandlerTests
         DataNascimento: new DateOnly(1980, 3, 15),
         Telefone: "11999998888",
         Endereco: null,
-        Rntrc: null);
+        AnttValidade: new DateOnly(2027, 1, 31),
+        Veiculos: new List<VeiculoMotoristaDto>());
 
     [Fact]
     public async Task Sanitizes_Cpf_Stripping_Mask_And_Letters_Before_Repo_Call()

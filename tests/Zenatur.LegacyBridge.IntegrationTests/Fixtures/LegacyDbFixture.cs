@@ -105,6 +105,10 @@ public sealed class LegacyDbFixture : IAsyncLifetime
             VALUES
                 (1, 'ABC1D23', '12345678', 1, 2018, 'VOLVO', 'FH 540', 8500, 25000, '00123456789'),
                 (2, 'XYZ-9876', '87654321', 2, 2020, 'SCANIA', 'R 450', 9000, 30000, '00987654321');");
+
+        // Note: TB_DadosVeiculo PK is cod_forn (1:1 with fornecedor) per current legacy schema.
+        // Multi-vehicle assertions in tests rely on the fact that motorista lookup returns
+        // the 0-or-1 vehicle bound to the matched cod_forn.
     }
 }
 

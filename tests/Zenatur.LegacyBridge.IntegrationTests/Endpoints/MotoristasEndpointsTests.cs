@@ -22,8 +22,11 @@ public class MotoristasEndpointsTests
         var body = await resp.Content.ReadAsStringAsync();
         Assert.Contains("\"cpf\":\"12345678901\"", body);
         Assert.Contains("\"nome\":\"JOAO DA SILVA\"", body);
-        Assert.Contains("\"rntrc\"", body);
         Assert.Contains("\"endereco\"", body);
+        Assert.Contains("\"anttValidade\"", body);
+        Assert.Contains("\"veiculos\"", body);
+        Assert.Contains("\"placa\":\"ABC1D23\"", body);
+        Assert.Contains("\"marca\":\"VOLVO\"", body);
     }
 
     [Fact]

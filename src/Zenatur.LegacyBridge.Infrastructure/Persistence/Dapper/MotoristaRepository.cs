@@ -28,13 +28,21 @@ public sealed class MotoristaRepository : IMotoristaRepository
             return await TransientSqlPipeline.Instance.ExecuteAsync(async token =>
             {
                 await using var conn = await _factory.CreateOpenAsync(token);
-                var row = await conn.QuerySingleOrDefaultAsync<MotoristaRow>(
+                using var multi = await conn.QueryMultipleAsync(
                     new CommandDefinition(
                         Sql,
                         new { cpf },
                         commandTimeout: _factory.CommandTimeoutSeconds,
                         cancellationToken: token));
-                return Result.Ok<MotoristaDto?>(row?.ToDto());
+
+                var motoristaRow = await multi.ReadFirstOrDefaultAsync<MotoristaRow>();
+                if (motoristaRow is null)
+                {
+                    return Result.Ok<MotoristaDto?>(null);
+                }
+
+                var veiculoRows = await multi.ReadAsync<VeiculoRow>();
+                return Result.Ok<MotoristaDto?>(motoristaRow.ToDto(veiculoRows));
             }, ct);
         }
         catch (SqlException ex)
@@ -57,11 +65,9 @@ public sealed class MotoristaRepository : IMotoristaRepository
         public string? CidadeIbge { get; set; }
         public string? Uf { get; set; }
         public string? Cep { get; set; }
-        public string? RntrcNumero { get; set; }
-        public bool? RntrcAtivo { get; set; }
-        public DateTime? RntrcValidade { get; set; }
+        public DateTime? AnttValidade { get; set; }
 
-        public MotoristaDto ToDto() => new(
+        public MotoristaDto ToDto(IEnumerable<VeiculoRow> veiculos) => new(
             Cpf: Cpf,
             Nome: Nome,
             DataNascimento: DataNascimento.HasValue ? DateOnly.FromDateTime(DataNascimento.Value) : null,
@@ -69,12 +75,8 @@ public sealed class MotoristaRepository : IMotoristaRepository
             Endereco: HasAnyAddressField()
                 ? new EnderecoDto(Logradouro, Numero, Complemento, Bairro, CidadeIbge, Uf, Cep)
                 : null,
-            Rntrc: !string.IsNullOrWhiteSpace(RntrcNumero)
-                ? new RntrcDto(
-                    RntrcNumero,
-                    RntrcAtivo,
-                    RntrcValidade.HasValue ? DateOnly.FromDateTime(RntrcValidade.Value) : null)
-                : null);
+            AnttValidade: AnttValidade.HasValue ? DateOnly.FromDateTime(AnttValidade.Value) : null,
+            Veiculos: veiculos.Select(v => v.ToDto()).ToList());
 
         private bool HasAnyAddressField() =>
             !string.IsNullOrWhiteSpace(Logradouro) ||
@@ -84,5 +86,29 @@ public sealed class MotoristaRepository : IMotoristaRepository
             !string.IsNullOrWhiteSpace(CidadeIbge) ||
             !string.IsNullOrWhiteSpace(Uf) ||
             !string.IsNullOrWhiteSpace(Cep);
+    }
+
+    private sealed class VeiculoRow
+    {
+        public string Placa { get; set; } = "";
+        public int? TipoVeiculo { get; set; }
+        public string? Renavam { get; set; }
+        public int? Ano { get; set; }
+        public string? Marca { get; set; }
+        public string? Modelo { get; set; }
+        public double? Tara { get; set; }
+        public double? CapacidadeKg { get; set; }
+        public string? Rntrc { get; set; }
+
+        public VeiculoMotoristaDto ToDto() => new(
+            Placa: Placa,
+            TipoVeiculo: TipoVeiculo,
+            Renavam: Renavam,
+            Ano: Ano,
+            Marca: Marca,
+            Modelo: Modelo,
+            Tara: Tara is null ? null : (decimal)Tara.Value,
+            CapacidadeKg: CapacidadeKg is null ? null : (decimal)CapacidadeKg.Value,
+            Rntrc: Rntrc);
     }
 }
