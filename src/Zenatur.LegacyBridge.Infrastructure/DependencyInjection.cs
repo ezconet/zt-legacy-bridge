@@ -16,6 +16,7 @@ public static class DependencyInjection
 
         services.AddScoped<DapperConnectionFactory>();
         services.AddScoped<IMotoristaRepository, MotoristaRepository>();
+        services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 
         return services;
     }
