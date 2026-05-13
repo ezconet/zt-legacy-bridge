@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Formatting.Compact;
+using Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
+using Zenatur.LegacyBridge.Endpoints;
+using Zenatur.LegacyBridge.Infrastructure;
 using Zenatur.LegacyBridge.Middleware;
 
 Log.Logger = new LoggerConfiguration()
@@ -19,6 +22,9 @@ try
 
     builder.Services.AddHealthChecks();
 
+    builder.Services.AddInfrastructure(builder.Configuration);
+    builder.Services.AddScoped<GetMotoristaByCpfHandler>();
+
     var app = builder.Build();
 
     app.UseSerilogRequestLogging();
@@ -32,6 +38,8 @@ try
         Predicate = _ => false
     });
     app.MapHealthChecks("/health/ready");
+
+    app.MapMotoristasEndpoints();
 
     if (app.Environment.IsEnvironment("Testing"))
     {
