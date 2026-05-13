@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Zenatur.LegacyBridge.Application.Ports;
 using Zenatur.LegacyBridge.Infrastructure.Persistence.Dapper;
 
 namespace Zenatur.LegacyBridge.Infrastructure;
@@ -14,6 +15,7 @@ public static class DependencyInjection
             .ValidateOnStart();
 
         services.AddScoped<DapperConnectionFactory>();
+        services.AddScoped<IMotoristaRepository, MotoristaRepository>();
 
         return services;
     }
