@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B97D6CDA-7C75-47FF-AED2-D1D906DE9F78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenatur.LegacyBridge", "src\Zenatur.LegacyBridge\Zenatur.LegacyBridge.csproj", "{58239B88-2BC0-40CE-8FB7-2A5B2EE28AB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenatur.LegacyBridge.Application", "src\Zenatur.LegacyBridge.Application\Zenatur.LegacyBridge.Application.csproj", "{6B6ACBA6-DA5E-46B8-AFE7-D6C3F24322B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenatur.LegacyBridge.Infrastructure", "src\Zenatur.LegacyBridge.Infrastructure\Zenatur.LegacyBridge.Infrastructure.csproj", "{838B3909-91F0-42B0-B6A5-2673B7590469}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{484A85D4-E1CE-46BB-A81A-F5CCC33D3726}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenatur.LegacyBridge.UnitTests", "tests\Zenatur.LegacyBridge.UnitTests\Zenatur.LegacyBridge.UnitTests.csproj", "{00CE2D24-A0BD-4F4F-89CD-369821D8D454}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenatur.LegacyBridge.IntegrationTests", "tests\Zenatur.LegacyBridge.IntegrationTests\Zenatur.LegacyBridge.IntegrationTests.csproj", "{4FF5D5BC-EDB1-4350-8DA0-A5231F048A8C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58239B88-2BC0-40CE-8FB7-2A5B2EE28AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58239B88-2BC0-40CE-8FB7-2A5B2EE28AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58239B88-2BC0-40CE-8FB7-2A5B2EE28AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58239B88-2BC0-40CE-8FB7-2A5B2EE28AB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B6ACBA6-DA5E-46B8-AFE7-D6C3F24322B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B6ACBA6-DA5E-46B8-AFE7-D6C3F24322B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B6ACBA6-DA5E-46B8-AFE7-D6C3F24322B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B6ACBA6-DA5E-46B8-AFE7-D6C3F24322B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{838B3909-91F0-42B0-B6A5-2673B7590469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{838B3909-91F0-42B0-B6A5-2673B7590469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{838B3909-91F0-42B0-B6A5-2673B7590469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{838B3909-91F0-42B0-B6A5-2673B7590469}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00CE2D24-A0BD-4F4F-89CD-369821D8D454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00CE2D24-A0BD-4F4F-89CD-369821D8D454}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00CE2D24-A0BD-4F4F-89CD-369821D8D454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00CE2D24-A0BD-4F4F-89CD-369821D8D454}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FF5D5BC-EDB1-4350-8DA0-A5231F048A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FF5D5BC-EDB1-4350-8DA0-A5231F048A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FF5D5BC-EDB1-4350-8DA0-A5231F048A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FF5D5BC-EDB1-4350-8DA0-A5231F048A8C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{58239B88-2BC0-40CE-8FB7-2A5B2EE28AB7} = {B97D6CDA-7C75-47FF-AED2-D1D906DE9F78}
+		{6B6ACBA6-DA5E-46B8-AFE7-D6C3F24322B9} = {B97D6CDA-7C75-47FF-AED2-D1D906DE9F78}
+		{838B3909-91F0-42B0-B6A5-2673B7590469} = {B97D6CDA-7C75-47FF-AED2-D1D906DE9F78}
+		{00CE2D24-A0BD-4F4F-89CD-369821D8D454} = {484A85D4-E1CE-46BB-A81A-F5CCC33D3726}
+		{4FF5D5BC-EDB1-4350-8DA0-A5231F048A8C} = {484A85D4-E1CE-46BB-A81A-F5CCC33D3726}
+	EndGlobalSection
+EndGlobal

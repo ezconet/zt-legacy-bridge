@@ -194,26 +194,7 @@ Busca veículo por placa.
 
 - `GET /v1/legacy/favorecidos/{documento}` — favorecido completo (motorista OU PJ) + contas.
 - `GET /v1/legacy/proprietarios/{documento}` — proprietário de veículo.
-
-> Adicionar conforme módulo CIOT do TMS demandar (ver `specs/tms/ciot-module.md` §3 Fase 1: busca paralela API CIOT + Pamcard — Bridge entra como **terceira fonte** nesse merge).
-
-### 5.4 Integração com merge Fase 1 do TMS
-
-O TMS CIOT Stepper Fase 1 faz `Task.WhenAll` em **3 fontes** (não 2 como dizia a spec original):
-
-```
-ciotTask    = ciotClient.GetFavorecido(cpf)         // base nova
-pamcardTask = pamcardClient.FindFavored(cpf)        // legado SOAP Pamcard
-bridgeTask  = legacyBridgeClient.GetMotorista(cpf)  // legado SQL Zenatur
-```
-
-Prioridade de merge (a ser confirmada no T11 do TMS):
-1. Dados cadastrais (nome, endereço): **Bridge** (sistema operacional Zenatur).
-2. Dados de RNTRC/validações: **Pamcard** (fonte de verdade ANTT).
-3. Dados de histórico Zenatur novo: **CIOT API**.
-
-> **TODO TMS:** ajustar T11 do plano para incluir `bridgeTask` no merge.
-
+ 
 ---
 
 ## 6. Endpoints da Sync API (internos — não-HTTP)
