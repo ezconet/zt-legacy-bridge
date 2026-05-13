@@ -1,7 +1,5 @@
 SELECT TOP 1
-    COALESCE(d.cpf,
-             REPLACE(REPLACE(REPLACE(REPLACE(f.cgc_forn,'.',''),'-',''),'/',''),' ',''))
-                                        AS Cpf,
+    @cpf                                AS Cpf,
     f.nome_forn                         AS Nome,
     CAST(NULL AS DATE)                  AS DataNascimento,
     f.tel1_forn                         AS Telefone,
