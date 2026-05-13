@@ -37,7 +37,7 @@
 
 ## Fase 3 — Query API: Motoristas
 
-- [ ] **L10** — Port `IMotoristaRepository` em Application/Ports + DTO `MotoristaDto` (CPF, nome, dataNascimento, telefone, endereco{}, rntrc{}).
+- [x] **L10** — Port `IMotoristaRepository` em Application/Ports + DTO `MotoristaDto` (CPF, nome, dataNascimento, telefone, endereco{}, rntrc{}).
 - [ ] **L11** — `DapperConnectionFactory` em Infrastructure/Persistence/Dapper (scoped, lê `LegacyDb:ConnectionString`, `CommandTimeoutSeconds`).
 - [ ] **L12** — `MotoristaRepository` Dapper: SQL `WITH (NOLOCK)` em arquivo embed `Sql/motorista_by_cpf.sql`. Polly retry transient (SqlException 1205, 4060, 40197, 40501, 40613, 49918–49920) — 3x exponencial.
 - [ ] **L13** — `GetMotoristaByCpfQuery` + `Handler` (Application/Queries): sanitiza CPF (digits only), chama repo, retorna `Result<MotoristaDto>` (Fail se não encontrado).
