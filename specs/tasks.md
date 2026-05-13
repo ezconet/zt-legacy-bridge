@@ -43,7 +43,7 @@
 - [x] **L13** — `GetMotoristaByCpfQuery` + `Handler` (Application/Queries): sanitiza CPF (digits only), chama repo, retorna `Result<MotoristaDto>` (Fail se não encontrado).
 - [x] **L14** — `MotoristasEndpoints.MapGroup("/v1/legacy/motoristas")` com `GET /{cpf}`: 200 payload, 404 `{ error, cpf }`, 503 com `Retry-After` se DB offline.
 - [x] **L15** — Mascarar CPF em logs (`123******01`).
-- [ ] **L16** — Unit tests: handler com repo mock (sanitização, 200, 404). Integration test: WebApplicationFactory + Testcontainers SQL com seed mínimo.
+- [x] **L16** — Unit tests: handler com repo mock (sanitização, 200, 404). Integration test: WebApplicationFactory + Testcontainers SQL com seed mínimo.
 
 ---
 
