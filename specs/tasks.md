@@ -31,7 +31,7 @@
 
 - [x] **L7** — `ApiKeyMiddleware` no host: lê `InboundApiKey` da config, valida header `X-Api-Key`, rejeita 401 com log `ApiKeyMissing` (Warn).
 - [x] **L8** — Aplicar middleware globalmente exceto em `/health/*`.
-- [ ] **L9** — Teste integration: `WebApplicationFactory` valida 401 sem header, 401 com header errado, 200 com header correto em endpoint stub.
+- [x] **L9** — Teste integration: `WebApplicationFactory` valida 401 sem header, 401 com header errado, 200 com header correto em endpoint stub.
 
 ---
 

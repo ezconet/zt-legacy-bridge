@@ -33,6 +33,11 @@ try
     });
     app.MapHealthChecks("/health/ready");
 
+    if (app.Environment.IsEnvironment("Testing"))
+    {
+        app.MapGet("/__test/secured-ping", () => Results.Ok("pong"));
+    }
+
     app.Run();
 }
 catch (Exception ex)
@@ -44,3 +49,5 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+public partial class Program;
