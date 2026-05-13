@@ -94,9 +94,9 @@
 
 ## Fase 7 — Health & Observabilidade
 
-- [ ] **L37** — `LegacyDbHealthCheck`: `SELECT 1` no legado.
-- [ ] **L38** — `CiotApiHealthCheck`: HEAD/GET trivial em endpoint público da CIOT API.
-- [ ] **L39** — `/health/ready` agrega ambos; `/health/live` retorna 200 sempre.
+- [x] **L37** — `LegacyDbHealthCheck`: `SELECT 1` no legado.
+- [x] **L38** — `CiotApiHealthCheck`: HEAD/GET trivial em endpoint público da CIOT API.
+- [x] **L39** — `/health/ready` agrega ambos; `/health/live` retorna 200 sempre.
 - [ ] **L40** — Logs estruturados Serilog: enrichers `outboxId`, `messageType`, `schemaVersion`, `retryCount`, `durationMs`, `cpfMasked`, `placa`. Eventos da §14.2.
 
 ---

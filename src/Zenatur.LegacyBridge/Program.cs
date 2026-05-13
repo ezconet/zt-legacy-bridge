@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Zenatur.LegacyBridge.Application.Common;
@@ -8,7 +9,10 @@ using Zenatur.LegacyBridge.Application.Ports;
 using Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
 using Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca;
 using Zenatur.LegacyBridge.Endpoints;
+using Zenatur.LegacyBridge.HealthChecks;
 using Zenatur.LegacyBridge.Infrastructure;
+using Zenatur.LegacyBridge.Infrastructure.Http;
+using Zenatur.LegacyBridge.Infrastructure.Persistence.Dapper;
 using Zenatur.LegacyBridge.Logging;
 using Zenatur.LegacyBridge.Middleware;
 using Zenatur.LegacyBridge.Workers;
@@ -31,9 +35,28 @@ try
         .ReadFrom.Configuration(ctx.Configuration)
         .Enrich.With<RequestPathMaskingEnricher>());
 
-    builder.Services.AddHealthChecks();
-
     builder.Services.AddInfrastructure(builder.Configuration);
+
+    builder.Services.AddHttpClient(CiotApiHealthCheck.HttpClientName, (sp, client) =>
+    {
+        var opts = sp.GetRequiredService<IOptions<CiotApiOptions>>().Value;
+        if (!string.IsNullOrWhiteSpace(opts.BaseUrl))
+        {
+            client.BaseAddress = new Uri(opts.BaseUrl);
+        }
+        client.Timeout = TimeSpan.FromSeconds(5);
+    });
+
+    builder.Services.AddSingleton<CiotApiHealthCheck>();
+    builder.Services.AddHealthChecks()
+        .AddSqlServer(
+            connectionStringFactory: sp => sp.GetRequiredService<IOptions<LegacyDbOptions>>().Value.ConnectionString,
+            healthQuery: "SELECT 1;",
+            name: "legacy-db",
+            tags: new[] { "ready" })
+        .AddCheck<CiotApiHealthCheck>(
+            name: "ciot-api",
+            tags: new[] { "ready" });
     builder.Services.AddScoped<GetMotoristaByCpfHandler>();
     builder.Services.AddScoped<GetVeiculoByPlacaHandler>();
 
@@ -60,7 +83,10 @@ try
     {
         Predicate = _ => false
     });
-    app.MapHealthChecks("/health/ready");
+    app.MapHealthChecks("/health/ready", new HealthCheckOptions
+    {
+        Predicate = check => check.Tags.Contains("ready"),
+    });
 
     app.MapMotoristasEndpoints();
     app.MapVeiculosEndpoints();
