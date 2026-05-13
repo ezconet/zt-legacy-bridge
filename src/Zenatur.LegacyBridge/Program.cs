@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Formatting.Compact;
+using Zenatur.LegacyBridge.Application.Common;
 using Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
 using Zenatur.LegacyBridge.Endpoints;
 using Zenatur.LegacyBridge.Infrastructure;
+using Zenatur.LegacyBridge.Logging;
 using Zenatur.LegacyBridge.Middleware;
 
 Log.Logger = new LoggerConfiguration()
@@ -18,7 +20,9 @@ try
 
     builder.Host.UseWindowsService(o => o.ServiceName = "ZenaturLegacyBridge");
 
-    builder.Host.UseSerilog((ctx, _, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
+    builder.Host.UseSerilog((ctx, _, cfg) => cfg
+        .ReadFrom.Configuration(ctx.Configuration)
+        .Enrich.With<RequestPathMaskingEnricher>());
 
     builder.Services.AddHealthChecks();
 
@@ -27,7 +31,14 @@ try
 
     var app = builder.Build();
 
-    app.UseSerilogRequestLogging();
+    app.UseSerilogRequestLogging(opts =>
+    {
+        opts.MessageTemplate = "HTTP {RequestMethod} {RequestPathMasked} responded {StatusCode} in {Elapsed:0.0000} ms";
+        opts.EnrichDiagnosticContext = (diag, ctx) =>
+        {
+            diag.Set("RequestPathMasked", PiiMask.Path(ctx.Request.Path));
+        };
+    });
 
     app.UseWhen(
         ctx => !ctx.Request.Path.StartsWithSegments("/health"),
