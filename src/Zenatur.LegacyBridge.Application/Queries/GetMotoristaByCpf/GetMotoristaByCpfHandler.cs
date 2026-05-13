@@ -1,4 +1,5 @@
 using FluentResults;
+using Microsoft.Extensions.Logging;
 using Zenatur.LegacyBridge.Application.Common;
 using Zenatur.LegacyBridge.Application.Ports;
 
@@ -7,10 +8,14 @@ namespace Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
 public sealed class GetMotoristaByCpfHandler
 {
     private readonly IMotoristaRepository _repo;
+    private readonly ILogger<GetMotoristaByCpfHandler> _logger;
 
-    public GetMotoristaByCpfHandler(IMotoristaRepository repo)
+    public GetMotoristaByCpfHandler(
+        IMotoristaRepository repo,
+        ILogger<GetMotoristaByCpfHandler> logger)
     {
         _repo = repo;
+        _logger = logger;
     }
 
     public async Task<Result<MotoristaDto>> HandleAsync(GetMotoristaByCpfQuery query, CancellationToken ct)
@@ -22,15 +27,22 @@ public sealed class GetMotoristaByCpfHandler
                 $"CPF must contain exactly 11 digits (got {cpfDigits.Length})."));
         }
 
+        var maskedCpf = PiiMask.Cpf(cpfDigits);
+
         var lookup = await _repo.GetByCpfAsync(cpfDigits, ct);
         if (lookup.IsFailed)
         {
             return Result.Fail(lookup.Errors);
         }
 
-        return lookup.Value is null
-            ? Result.Fail(new NotFoundError("Motorista não encontrado"))
-            : Result.Ok(lookup.Value);
+        if (lookup.Value is null)
+        {
+            _logger.LogWarning("QueryNotFound motorista cpf={CpfMasked}", maskedCpf);
+            return Result.Fail(new NotFoundError("Motorista não encontrado"));
+        }
+
+        _logger.LogInformation("QuerySucceeded motorista cpf={CpfMasked}", maskedCpf);
+        return Result.Ok(lookup.Value);
     }
 
     private static string SanitizeCpf(string cpf) =>

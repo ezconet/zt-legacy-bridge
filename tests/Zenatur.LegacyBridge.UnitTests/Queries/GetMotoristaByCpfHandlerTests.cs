@@ -1,4 +1,5 @@
 using FluentResults;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Zenatur.LegacyBridge.Application.Common;
 using Zenatur.LegacyBridge.Application.Ports;
@@ -22,7 +23,7 @@ public class GetMotoristaByCpfHandlerTests
         var repo = new Mock<IMotoristaRepository>();
         repo.Setup(r => r.GetByCpfAsync("12345678901", It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Ok<MotoristaDto?>(Sample));
-        var handler = new GetMotoristaByCpfHandler(repo.Object);
+        var handler = new GetMotoristaByCpfHandler(repo.Object, NullLogger<GetMotoristaByCpfHandler>.Instance);
 
         var result = await handler.HandleAsync(
             new GetMotoristaByCpfQuery("123.456.789-01"),
@@ -38,7 +39,7 @@ public class GetMotoristaByCpfHandlerTests
         var repo = new Mock<IMotoristaRepository>();
         repo.Setup(r => r.GetByCpfAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Ok<MotoristaDto?>(Sample));
-        var handler = new GetMotoristaByCpfHandler(repo.Object);
+        var handler = new GetMotoristaByCpfHandler(repo.Object, NullLogger<GetMotoristaByCpfHandler>.Instance);
 
         var result = await handler.HandleAsync(
             new GetMotoristaByCpfQuery("12345678901"),
@@ -54,7 +55,7 @@ public class GetMotoristaByCpfHandlerTests
         var repo = new Mock<IMotoristaRepository>();
         repo.Setup(r => r.GetByCpfAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Ok<MotoristaDto?>(null));
-        var handler = new GetMotoristaByCpfHandler(repo.Object);
+        var handler = new GetMotoristaByCpfHandler(repo.Object, NullLogger<GetMotoristaByCpfHandler>.Instance);
 
         var result = await handler.HandleAsync(
             new GetMotoristaByCpfQuery("99999999999"),
@@ -68,7 +69,7 @@ public class GetMotoristaByCpfHandlerTests
     public async Task Returns_ValidationError_When_Sanitized_Cpf_Has_Wrong_Length()
     {
         var repo = new Mock<IMotoristaRepository>();
-        var handler = new GetMotoristaByCpfHandler(repo.Object);
+        var handler = new GetMotoristaByCpfHandler(repo.Object, NullLogger<GetMotoristaByCpfHandler>.Instance);
 
         var result = await handler.HandleAsync(
             new GetMotoristaByCpfQuery("abc-123"),
@@ -87,7 +88,7 @@ public class GetMotoristaByCpfHandlerTests
         var repo = new Mock<IMotoristaRepository>();
         repo.Setup(r => r.GetByCpfAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Fail<MotoristaDto?>(new InfraError("LegacyDbUnreachable")));
-        var handler = new GetMotoristaByCpfHandler(repo.Object);
+        var handler = new GetMotoristaByCpfHandler(repo.Object, NullLogger<GetMotoristaByCpfHandler>.Instance);
 
         var result = await handler.HandleAsync(
             new GetMotoristaByCpfQuery("12345678901"),

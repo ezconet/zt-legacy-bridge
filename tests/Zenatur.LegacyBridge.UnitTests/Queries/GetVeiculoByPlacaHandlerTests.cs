@@ -1,4 +1,5 @@
 using FluentResults;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Zenatur.LegacyBridge.Application.Common;
 using Zenatur.LegacyBridge.Application.Ports;
@@ -25,7 +26,7 @@ public class GetVeiculoByPlacaHandlerTests
         var repo = new Mock<IVeiculoRepository>();
         repo.Setup(r => r.GetByPlacaAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(result ?? Result.Ok<VeiculoDto?>(Sample));
-        return (repo, new GetVeiculoByPlacaHandler(repo.Object));
+        return (repo, new GetVeiculoByPlacaHandler(repo.Object, NullLogger<GetVeiculoByPlacaHandler>.Instance));
     }
 
     [Fact]

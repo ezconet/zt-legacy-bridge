@@ -1,4 +1,5 @@
 using FluentResults;
+using Microsoft.Extensions.Logging;
 using Zenatur.LegacyBridge.Application.Common;
 using Zenatur.LegacyBridge.Application.Ports;
 
@@ -7,10 +8,14 @@ namespace Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca;
 public sealed class GetVeiculoByPlacaHandler
 {
     private readonly IVeiculoRepository _repo;
+    private readonly ILogger<GetVeiculoByPlacaHandler> _logger;
 
-    public GetVeiculoByPlacaHandler(IVeiculoRepository repo)
+    public GetVeiculoByPlacaHandler(
+        IVeiculoRepository repo,
+        ILogger<GetVeiculoByPlacaHandler> logger)
     {
         _repo = repo;
+        _logger = logger;
     }
 
     public async Task<Result<VeiculoDto>> HandleAsync(GetVeiculoByPlacaQuery query, CancellationToken ct)
@@ -34,9 +39,14 @@ public sealed class GetVeiculoByPlacaHandler
             return Result.Fail(lookup.Errors);
         }
 
-        return lookup.Value is null
-            ? Result.Fail(new NotFoundError("Veículo não encontrado"))
-            : Result.Ok(lookup.Value);
+        if (lookup.Value is null)
+        {
+            _logger.LogWarning("QueryNotFound veiculo placa={Placa}", placa);
+            return Result.Fail(new NotFoundError("Veículo não encontrado"));
+        }
+
+        _logger.LogInformation("QuerySucceeded veiculo placa={Placa}", placa);
+        return Result.Ok(lookup.Value);
     }
 
     private static string SanitizePlaca(string placa) =>
