@@ -3,11 +3,13 @@ DECLARE @CodForn INT;
 SELECT TOP 1 @CodForn = f.cod_forn
 FROM dbo.fornecedor f WITH (NOLOCK)
 LEFT JOIN dbo.TB_DocumentoMotorista d WITH (NOLOCK) ON d.cod_forn = f.cod_forn
-WHERE d.cpf = @cpf
-   OR REPLACE(REPLACE(REPLACE(REPLACE(f.cgc_forn,'.',''),'-',''),'/',''),' ','') = @cpf;
+WHERE d.cpf = @documento
+   OR REPLACE(REPLACE(REPLACE(REPLACE(f.cgc_forn,'.',''),'-',''),'/',''),' ','') = @documento;
 
 SELECT
-    @cpf                                AS Cpf,
+    @documento                          AS Documento,
+    CASE WHEN LEN(@documento) = 14 THEN 'CNPJ' ELSE 'CPF' END
+                                        AS TipoDocumento,
     f.nome_forn                         AS Nome,
     CAST(NULL AS DATE)                  AS DataNascimento,
     f.tel1_forn                         AS Telefone,

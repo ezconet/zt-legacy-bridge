@@ -22,7 +22,7 @@ public sealed class MotoristaRepository : IMotoristaRepository
         _logger = logger;
     }
 
-    public async Task<Result<MotoristaDto?>> GetByCpfAsync(string cpf, CancellationToken ct)
+    public async Task<Result<MotoristaDto?>> GetByCpfAsync(string documento, CancellationToken ct)
     {
         try
         {
@@ -32,7 +32,7 @@ public sealed class MotoristaRepository : IMotoristaRepository
                 using var multi = await conn.QueryMultipleAsync(
                     new CommandDefinition(
                         Sql,
-                        new { cpf },
+                        new { documento },
                         commandTimeout: _factory.CommandTimeoutSeconds,
                         cancellationToken: token));
 
@@ -55,7 +55,8 @@ public sealed class MotoristaRepository : IMotoristaRepository
 
     private sealed class MotoristaRow
     {
-        public string Cpf { get; set; } = "";
+        public string Documento { get; set; } = "";
+        public string TipoDocumento { get; set; } = "CPF";
         public string Nome { get; set; } = "";
         public DateTime? DataNascimento { get; set; }
         public string? Telefone { get; set; }
@@ -69,7 +70,8 @@ public sealed class MotoristaRepository : IMotoristaRepository
         public DateTime? AnttValidade { get; set; }
 
         public MotoristaDto ToDto(IEnumerable<VeiculoRepository.VeiculoRow> veiculos) => new(
-            Cpf: Cpf,
+            Documento: Documento,
+            TipoDocumento: TipoDocumento,
             Nome: Nome,
             DataNascimento: DataNascimento.HasValue ? DateOnly.FromDateTime(DataNascimento.Value) : null,
             Telefone: Telefone,

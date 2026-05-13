@@ -39,6 +39,14 @@ public class PiiMaskTests
     }
 
     [Fact]
+    public void Path_Masks_Motorista_Cnpj_Segment()
+    {
+        Assert.Equal(
+            "/v1/legacy/motoristas/123******99",
+            PiiMask.Path("/v1/legacy/motoristas/12345678000199"));
+    }
+
+    [Fact]
     public void Path_Without_Match_Unchanged()
     {
         Assert.Equal("/health/live", PiiMask.Path("/health/live"));

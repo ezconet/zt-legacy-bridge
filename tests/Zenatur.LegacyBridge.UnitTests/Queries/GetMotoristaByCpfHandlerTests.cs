@@ -10,7 +10,8 @@ namespace Zenatur.LegacyBridge.UnitTests.Queries;
 public class GetMotoristaByCpfHandlerTests
 {
     private static readonly MotoristaDto Sample = new(
-        Cpf: "12345678901",
+        Documento: "12345678901",
+        TipoDocumento: "CPF",
         Nome: "JOAO DA SILVA",
         DataNascimento: new DateOnly(1980, 3, 15),
         Telefone: "11999998888",
@@ -81,6 +82,22 @@ public class GetMotoristaByCpfHandlerTests
         repo.Verify(
             r => r.GetByCpfAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
             Times.Never);
+    }
+
+    [Fact]
+    public async Task Accepts_Cnpj_14_Digits_With_Mask()
+    {
+        var repo = new Mock<IMotoristaRepository>();
+        repo.Setup(r => r.GetByCpfAsync("12345678000199", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Ok<MotoristaDto?>(Sample with { Documento = "12345678000199", TipoDocumento = "CNPJ" }));
+        var handler = new GetMotoristaByCpfHandler(repo.Object, NullLogger<GetMotoristaByCpfHandler>.Instance);
+
+        var result = await handler.HandleAsync(
+            new GetMotoristaByCpfQuery("12.345.678/0001-99"),
+            CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        repo.Verify(r => r.GetByCpfAsync("12345678000199", It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]

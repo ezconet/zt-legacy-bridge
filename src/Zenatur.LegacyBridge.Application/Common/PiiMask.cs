@@ -4,8 +4,8 @@ namespace Zenatur.LegacyBridge.Application.Common;
 
 public static class PiiMask
 {
-    private static readonly Regex CpfInPath = new(
-        @"(?i)(/v1/legacy/motoristas/)(\d{11})",
+    private static readonly Regex DocumentoInPath = new(
+        @"(?i)(/v1/legacy/motoristas/)(\d{11,14})",
         RegexOptions.Compiled);
 
     public static string Cpf(string? cpf) =>
@@ -17,5 +17,6 @@ public static class PiiMask
     public static string Path(string? path) =>
         string.IsNullOrEmpty(path)
             ? string.Empty
-            : CpfInPath.Replace(path, m => m.Groups[1].Value + Cpf(m.Groups[2].Value));
+            : DocumentoInPath.Replace(path, m =>
+                m.Groups[1].Value + (m.Groups[2].Length == 14 ? Cnpj(m.Groups[2].Value) : Cpf(m.Groups[2].Value)));
 }

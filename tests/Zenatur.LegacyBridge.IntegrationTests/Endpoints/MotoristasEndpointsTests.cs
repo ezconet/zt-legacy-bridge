@@ -14,13 +14,14 @@ public class MotoristasEndpointsTests
     }
 
     [Fact]
-    public async Task Returns_200_With_Motorista_Payload_On_Match()
+    public async Task Returns_200_With_Motorista_Payload_On_Cpf_Match()
     {
         var resp = await _fixture.AuthorizedClient().GetAsync("/v1/legacy/motoristas/12345678901");
 
         Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
         var body = await resp.Content.ReadAsStringAsync();
-        Assert.Contains("\"cpf\":\"12345678901\"", body);
+        Assert.Contains("\"documento\":\"12345678901\"", body);
+        Assert.Contains("\"tipoDocumento\":\"CPF\"", body);
         Assert.Contains("\"nome\":\"JOAO DA SILVA\"", body);
         Assert.Contains("\"endereco\"", body);
         Assert.Contains("\"anttValidade\"", body);
@@ -28,12 +29,23 @@ public class MotoristasEndpointsTests
         Assert.Contains("\"placa\":\"ABC1D23\"", body);
         Assert.Contains("\"marca\":\"VOLVO\"", body);
         Assert.Contains("\"descricao\":\"CAMINHAO 3/4\"", body);
-        // Vehicles inside motorista response do not echo proprietario (motorista IS proprietario).
         Assert.DoesNotContain("\"proprietario\":{", body);
     }
 
     [Fact]
-    public async Task Returns_404_When_Cpf_Not_Found()
+    public async Task Returns_200_With_Pj_Payload_On_Cnpj_Match()
+    {
+        var resp = await _fixture.AuthorizedClient().GetAsync("/v1/legacy/motoristas/12345678000199");
+
+        Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
+        var body = await resp.Content.ReadAsStringAsync();
+        Assert.Contains("\"documento\":\"12345678000199\"", body);
+        Assert.Contains("\"tipoDocumento\":\"CNPJ\"", body);
+        Assert.Contains("\"nome\":\"TRANSPORTES X LTDA\"", body);
+    }
+
+    [Fact]
+    public async Task Returns_404_When_Documento_Not_Found()
     {
         var resp = await _fixture.AuthorizedClient().GetAsync("/v1/legacy/motoristas/99999999999");
 
@@ -41,7 +53,7 @@ public class MotoristasEndpointsTests
     }
 
     [Fact]
-    public async Task Returns_400_When_Cpf_Has_Wrong_Length()
+    public async Task Returns_400_When_Documento_Has_Wrong_Length()
     {
         var resp = await _fixture.AuthorizedClient().GetAsync("/v1/legacy/motoristas/123");
 

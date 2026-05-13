@@ -20,16 +20,16 @@ public sealed class GetMotoristaByCpfHandler
 
     public async Task<Result<MotoristaDto>> HandleAsync(GetMotoristaByCpfQuery query, CancellationToken ct)
     {
-        var cpfDigits = SanitizeCpf(query.Cpf);
-        if (cpfDigits.Length != 11)
+        var documento = SanitizeDigits(query.Documento);
+        if (documento.Length != 11 && documento.Length != 14)
         {
             return Result.Fail(new ValidationError(
-                $"CPF must contain exactly 11 digits (got {cpfDigits.Length})."));
+                $"Documento must contain 11 (CPF) or 14 (CNPJ) digits (got {documento.Length})."));
         }
 
-        var maskedCpf = PiiMask.Cpf(cpfDigits);
+        var maskedDoc = documento.Length == 14 ? PiiMask.Cnpj(documento) : PiiMask.Cpf(documento);
 
-        var lookup = await _repo.GetByCpfAsync(cpfDigits, ct);
+        var lookup = await _repo.GetByCpfAsync(documento, ct);
         if (lookup.IsFailed)
         {
             return Result.Fail(lookup.Errors);
@@ -37,14 +37,14 @@ public sealed class GetMotoristaByCpfHandler
 
         if (lookup.Value is null)
         {
-            _logger.LogWarning("QueryNotFound motorista cpf={CpfMasked}", maskedCpf);
-            return Result.Fail(new NotFoundError("Motorista não encontrado"));
+            _logger.LogWarning("QueryNotFound favorecido documento={DocumentoMasked}", maskedDoc);
+            return Result.Fail(new NotFoundError("Favorecido não encontrado"));
         }
 
-        _logger.LogInformation("QuerySucceeded motorista cpf={CpfMasked}", maskedCpf);
+        _logger.LogInformation("QuerySucceeded favorecido documento={DocumentoMasked}", maskedDoc);
         return Result.Ok(lookup.Value);
     }
 
-    private static string SanitizeCpf(string cpf) =>
-        new(cpf.Where(char.IsDigit).ToArray());
+    private static string SanitizeDigits(string input) =>
+        new(input.Where(char.IsDigit).ToArray());
 }

@@ -3,7 +3,8 @@ using Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca;
 namespace Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
 
 public sealed record MotoristaDto(
-    string Cpf,
+    string Documento,
+    string TipoDocumento,
     string Nome,
     DateOnly? DataNascimento,
     string? Telefone,
