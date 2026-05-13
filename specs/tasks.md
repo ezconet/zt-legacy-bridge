@@ -18,10 +18,10 @@
 
 ## Fase 1 — Esqueleto da Solution
 
-- [ ] **L1** — Criar Solution `Zenatur.LegacyBridge.sln` em `D:\devops.zenatur\zt-lagacy-bridge` com 3 projetos: `Zenatur.LegacyBridge` (Web API host), `Zenatur.LegacyBridge.Application`, `Zenatur.LegacyBridge.Infrastructure` + 2 projetos de teste (`UnitTests`, `IntegrationTests`).
-- [ ] **L2** — Referências: Web→Application + Infrastructure (composition root); Infrastructure→Application; Application sem dependências externas (pure ports/DTOs).
-- [ ] **L3** — Adicionar NuGets: `Dapper`, `Microsoft.Data.SqlClient`, `Polly`, `Polly.Extensions.Http`, `Serilog.AspNetCore`, `Serilog.Sinks.File`, `FluentResults`, `FluentValidation`, `FluentValidation.DependencyInjectionExtensions`, `Microsoft.Extensions.Hosting.WindowsServices`, `AspNetCore.HealthChecks`, `Microsoft.Extensions.Http.Polly`.
-- [ ] **L4** — `Program.cs`: `WebApplicationBuilder` + `UseWindowsService()` + Serilog JSON rolling file + DI vazio + Health endpoints (`/health/live`, `/health/ready`).
+- [x] **L1** — Criar Solution `Zenatur.LegacyBridge.sln` em `D:\devops.zenatur\zt-lagacy-bridge` com 3 projetos: `Zenatur.LegacyBridge` (Web API host), `Zenatur.LegacyBridge.Application`, `Zenatur.LegacyBridge.Infrastructure` + 2 projetos de teste (`UnitTests`, `IntegrationTests`).
+- [x] **L2** — Referências: Web→Application + Infrastructure (composition root); Infrastructure→Application; Application sem dependências externas (pure ports/DTOs).
+- [x] **L3** — Adicionar NuGets: `Dapper`, `Microsoft.Data.SqlClient`, `Polly`, `Polly.Extensions.Http`, `Serilog.AspNetCore`, `Serilog.Sinks.File`, `FluentResults`, `FluentValidation`, `FluentValidation.DependencyInjectionExtensions`, `Microsoft.Extensions.Hosting.WindowsServices`, `AspNetCore.HealthChecks`, `Microsoft.Extensions.Http.Polly`.
+- [x] **L4** — `Program.cs`: `WebApplicationBuilder` + `UseWindowsService()` + Serilog JSON rolling file + DI vazio + Health endpoints (`/health/live`, `/health/ready`).
 - [ ] **L5** — Estrutura de pastas conforme §11 da architecture (Endpoints, Middleware, Workers, HealthChecks no host; Ports, Queries, OutboxHandlers, Dispatching, Common na Application; Http, Persistence/Dapper, Sql/ na Infrastructure).
 - [ ] **L6** — `appsettings.json` + `appsettings.Development.json` com seções `CiotApi`, `LegacyDb`, `InboundApiKey`, `Serilog` (§12.1).
 
