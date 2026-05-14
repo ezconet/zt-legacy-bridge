@@ -7,21 +7,24 @@ WHERE d.cpf = @documento
    OR REPLACE(REPLACE(REPLACE(REPLACE(f.cgc_forn,'.',''),'-',''),'/',''),' ','') = @documento;
 
 SELECT
-    @documento                          AS Documento,
-    CASE WHEN LEN(@documento) = 14 THEN 'CNPJ' ELSE 'CPF' END
-                                        AS TipoDocumento,
-    f.nome_forn                         AS Nome,
-    CAST(NULL AS DATE)                  AS DataNascimento,
-    f.tel1_forn                         AS Telefone,
-    f.endereco_forn                     AS Logradouro,
-    CAST(NULL AS NVARCHAR(20))          AS Numero,
-    CAST(NULL AS NVARCHAR(100))         AS Complemento,
-    f.bairro_forn                       AS Bairro,
-    CAST(NULL AS NVARCHAR(7))           AS CidadeIbge,
-    f.uf_forn                           AS Uf,
-    f.cep_forn                          AS Cep,
-    f.dt_antt                           AS AnttValidade
+    @documento                                                              AS Documento,
+    CASE WHEN LEN(@documento) = 14 THEN 'CNPJ' ELSE 'CPF' END                AS TipoDocumento,
+    f.nome_forn                                                              AS Nome,
+    m.dt_nascimento                                                          AS DataNascimento,
+    f.tel1_forn                                                              AS Telefone,
+    COALESCE(m.ds_logradouro, f.endereco_forn)                               AS Logradouro,
+    m.ds_numero                                                              AS Numero,
+    m.ds_complemento                                                         AS Complemento,
+    COALESCE(m.ds_bairro, f.bairro_forn)                                     AS Bairro,
+    c.nr_municipio                                                           AS CidadeIbge,
+    COALESCE(m.uf, f.uf_forn)                                                AS Uf,
+    COALESCE(m.ds_cep, f.cep_forn)                                           AS Cep,
+    f.dt_antt                                                                AS AnttValidade
 FROM dbo.fornecedor f WITH (NOLOCK)
+LEFT JOIN [bd_fin_zenatur].dbo.tb_motorista m WITH (NOLOCK)
+    ON REPLACE(REPLACE(REPLACE(REPLACE(m.ds_cpf,'.',''),'-',''),'/',''),' ','') = @documento
+LEFT JOIN [bd_fin_zenatur].dbo.tb_cidade c WITH (NOLOCK)
+    ON c.cod_cidade = COALESCE(m.cod_cidade, f.cod_cidade)
 WHERE f.cod_forn = @CodForn;
 
 SELECT
