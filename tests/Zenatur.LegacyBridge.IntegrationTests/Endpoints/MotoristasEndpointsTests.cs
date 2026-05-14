@@ -24,12 +24,13 @@ public class MotoristasEndpointsTests
         Assert.Contains("\"tipoDocumento\":\"CPF\"", body);
         Assert.Contains("\"nome\":\"JOAO DA SILVA\"", body);
         Assert.Contains("\"endereco\"", body);
-        // From bd_fin_zenatur.tb_motorista LEFT JOIN
-        Assert.Contains("\"dataNascimento\":\"1980-03-15\"", body);
-        Assert.Contains("\"numero\":\"1500\"", body);
-        Assert.Contains("\"complemento\":\"APTO 304\"", body);
-        // From bd_fin_zenatur.tb_cidade JOIN
-        Assert.Contains("\"cidadeIbge\":\"3550308\"", body);
+        Assert.Contains("\"telefone\":\"11999998888\"", body);
+        Assert.Contains("\"logradouro\":\"RUA X 100\"", body);
+        // SQL trailing-digit parser
+        Assert.Contains("\"numero\":\"100\"", body);
+        // dataNascimento intentionally null + cidadeIbge dropped
+        Assert.Contains("\"dataNascimento\":null", body);
+        Assert.DoesNotContain("\"cidadeIbge\"", body);
         Assert.Contains("\"anttValidade\"", body);
         Assert.Contains("\"veiculos\"", body);
         Assert.Contains("\"placa\":\"ABC1D23\"", body);

@@ -10,21 +10,26 @@ SELECT
     @documento                                                              AS Documento,
     CASE WHEN LEN(@documento) = 14 THEN 'CNPJ' ELSE 'CPF' END                AS TipoDocumento,
     f.nome_forn                                                              AS Nome,
-    m.dt_nascimento                                                          AS DataNascimento,
+    CAST(NULL AS DATE)                                                       AS DataNascimento,
     f.tel1_forn                                                              AS Telefone,
-    COALESCE(m.ds_logradouro, f.endereco_forn)                               AS Logradouro,
-    m.ds_numero                                                              AS Numero,
-    m.ds_complemento                                                         AS Complemento,
-    COALESCE(m.ds_bairro, f.bairro_forn)                                     AS Bairro,
-    c.nr_municipio                                                           AS CidadeIbge,
-    COALESCE(m.uf, f.uf_forn)                                                AS Uf,
-    COALESCE(m.ds_cep, f.cep_forn)                                           AS Cep,
+    f.endereco_forn                                                          AS Logradouro,
+    -- Best-effort parse: pick trailing digit run from endereco_forn (e.g. "RUA X 560" → "560").
+    -- Returns NULL when address does not end in digits ("RUA Y SN", "RUA Z 100A", empty).
+    CASE
+        WHEN f.endereco_forn LIKE '%[0-9]'
+        THEN REVERSE(
+                SUBSTRING(
+                    REVERSE(f.endereco_forn),
+                    1,
+                    PATINDEX('%[^0-9]%', REVERSE(f.endereco_forn) + ' ') - 1))
+        ELSE NULL
+    END                                                                      AS Numero,
+    CAST(NULL AS NVARCHAR(100))                                              AS Complemento,
+    f.bairro_forn                                                            AS Bairro,
+    f.uf_forn                                                                AS Uf,
+    f.cep_forn                                                               AS Cep,
     f.dt_antt                                                                AS AnttValidade
 FROM dbo.fornecedor f WITH (NOLOCK)
-LEFT JOIN [bd_fin_zenatur].dbo.tb_motorista m WITH (NOLOCK)
-    ON REPLACE(REPLACE(REPLACE(REPLACE(m.ds_cpf,'.',''),'-',''),'/',''),' ','') = @documento
-LEFT JOIN [bd_fin_zenatur].dbo.tb_cidade c WITH (NOLOCK)
-    ON c.cod_cidade = COALESCE(m.cod_cidade, f.cod_cidade)
 WHERE f.cod_forn = @CodForn;
 
 SELECT

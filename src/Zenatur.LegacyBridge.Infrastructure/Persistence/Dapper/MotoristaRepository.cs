@@ -64,7 +64,6 @@ public sealed class MotoristaRepository : IMotoristaRepository
         public string? Numero { get; set; }
         public string? Complemento { get; set; }
         public string? Bairro { get; set; }
-        public string? CidadeIbge { get; set; }
         public string? Uf { get; set; }
         public string? Cep { get; set; }
         public DateTime? AnttValidade { get; set; }
@@ -76,7 +75,7 @@ public sealed class MotoristaRepository : IMotoristaRepository
             DataNascimento: DataNascimento.HasValue ? DateOnly.FromDateTime(DataNascimento.Value) : null,
             Telefone: Telefone,
             Endereco: HasAnyAddressField()
-                ? new EnderecoDto(Logradouro, Numero, Complemento, Bairro, CidadeIbge, Uf, Cep)
+                ? new EnderecoDto(Logradouro, Numero, Complemento, Bairro, Uf, Cep)
                 : null,
             AnttValidade: AnttValidade.HasValue ? DateOnly.FromDateTime(AnttValidade.Value) : null,
             Veiculos: veiculos.Select(v => v.ToDto(includeProprietario: false)).ToList());
@@ -86,7 +85,6 @@ public sealed class MotoristaRepository : IMotoristaRepository
             !string.IsNullOrWhiteSpace(Numero) ||
             !string.IsNullOrWhiteSpace(Complemento) ||
             !string.IsNullOrWhiteSpace(Bairro) ||
-            !string.IsNullOrWhiteSpace(CidadeIbge) ||
             !string.IsNullOrWhiteSpace(Uf) ||
             !string.IsNullOrWhiteSpace(Cep);
     }

@@ -66,40 +66,9 @@ public sealed class LegacyDbFixture : IAsyncLifetime
             INSERT INTO [DB_WMS].dbo.TB_REC_Veiculos (idVeiculo, Descricao)
             VALUES (1, 'CAMINHAO 3/4'), (2, 'TRUCK / TOCO');");
 
-        await conn.ExecuteAsync("CREATE DATABASE bd_fin_zenatur;");
-        await conn.ExecuteAsync(@"
-            CREATE TABLE [bd_fin_zenatur].dbo.tb_cidade (
-                cod_cidade    INT          NOT NULL PRIMARY KEY,
-                uf            VARCHAR(5)   NULL,
-                cidade        VARCHAR(100) NULL,
-                nr_municipio  VARCHAR(10)  NULL
-            );
-            INSERT INTO [bd_fin_zenatur].dbo.tb_cidade
-                (cod_cidade, uf, cidade, nr_municipio)
-            VALUES
-                (3550308, 'SP', 'SAO PAULO', '3550308');
-
-            CREATE TABLE [bd_fin_zenatur].dbo.tb_motorista (
-                id_motorista     INT           NOT NULL PRIMARY KEY,
-                nm_motorista     VARCHAR(300)  NULL,
-                dt_nascimento    DATETIME      NULL,
-                ds_cpf           VARCHAR(20)   NULL,
-                ds_cep           VARCHAR(20)   NULL,
-                ds_logradouro    VARCHAR(100)  NULL,
-                ds_numero        VARCHAR(10)   NULL,
-                ds_complemento   VARCHAR(50)   NULL,
-                ds_bairro        VARCHAR(100)  NULL,
-                uf               VARCHAR(5)    NULL,
-                cod_cidade       INT           NULL
-            );
-            INSERT INTO [bd_fin_zenatur].dbo.tb_motorista
-                (id_motorista, nm_motorista, dt_nascimento, ds_cpf,
-                 ds_cep, ds_logradouro, ds_numero, ds_complemento, ds_bairro,
-                 uf, cod_cidade)
-            VALUES
-                (10, 'JOAO DA SILVA', '1980-03-15', '12345678901',
-                 '01310100', 'AVENIDA PAULISTA', '1500', 'APTO 304', 'BELA VISTA',
-                 'SP', 3550308);");
+        // bd_fin_zenatur cross-DB JOIN dropped — dataNascimento intentionally null,
+        // cidadeIbge removed from DTO. endereco_forn now carries trailing-digit numero
+        // via SQL parser (kept logradouro intact).
 
         await conn.ExecuteAsync(@"
             CREATE TABLE dbo.fornecedor (
@@ -136,9 +105,9 @@ public sealed class LegacyDbFixture : IAsyncLifetime
                 (cod_forn, nome_forn, endereco_forn, bairro_forn, uf_forn,
                  cgc_forn, cep_forn, tel1_forn, dt_antt)
             VALUES
-                (1, 'JOAO DA SILVA', 'RUA X, 100', 'CENTRO', 'SP',
+                (1, 'JOAO DA SILVA', 'RUA X 100', 'CENTRO', 'SP',
                  '12345678901', '01310100', '11999998888', '2027-01-31'),
-                (2, 'TRANSPORTES X LTDA', 'AV CENTRAL, 500', 'INDUSTRIAL', 'SP',
+                (2, 'TRANSPORTES X LTDA', 'AV CENTRAL 500', 'INDUSTRIAL', 'SP',
                  '12345678000199', '04500000', '1133334444', '2028-06-30');
 
             INSERT INTO dbo.TB_DocumentoMotorista (cod_forn, cpf)

@@ -17,6 +17,5 @@ public sealed record EnderecoDto(
     string? Numero,
     string? Complemento,
     string? Bairro,
-    string? CidadeIbge,
     string? Uf,
     string? Cep);
