@@ -35,6 +35,12 @@ try
         .ReadFrom.Configuration(ctx.Configuration)
         .Enrich.With<RequestPathMaskingEnricher>());
 
+    builder.Services.ConfigureHttpJsonOptions(o =>
+    {
+        o.SerializerOptions.DefaultIgnoreCondition =
+            System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
+
     builder.Services.AddInfrastructure(builder.Configuration);
 
     builder.Services.AddHttpClient(CiotApiHealthCheck.HttpClientName, (sp, client) =>
