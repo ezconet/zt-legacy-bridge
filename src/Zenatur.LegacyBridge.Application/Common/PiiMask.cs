@@ -14,6 +14,14 @@ public static class PiiMask
     public static string Cnpj(string? cnpj) =>
         cnpj is { Length: 14 } ? $"{cnpj[..3]}******{cnpj[^2..]}" : "***";
 
+    public static string Documento(string? documento) =>
+        documento?.Length switch
+        {
+            11 => Cpf(documento),
+            14 => Cnpj(documento),
+            _ => "***",
+        };
+
     public static string Path(string? path) =>
         string.IsNullOrEmpty(path)
             ? string.Empty

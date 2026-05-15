@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -68,6 +69,26 @@ try
 
     builder.Services.AddScoped<IOutboxDispatcher, OutboxDispatcher>();
     builder.Services.AddScoped<IOutboxMessageHandler, CiotEmitidoHandler>();
+
+    builder.Services.AddValidatorsFromAssemblyContaining<
+        Zenatur.LegacyBridge.Application.OutboxHandlers.Favorecido.FavorecidoEnvelopeValidator>();
+
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Favorecido.FavorecidoCriadoHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Favorecido.FavorecidoAtualizadoHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Favorecido.FavorecidoContaAdicionadaHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Favorecido.FavorecidoContaAtualizadaHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Favorecido.FavorecidoContaRemovidaHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Motorista.MotoristaCriadoHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Motorista.MotoristaAtualizadoHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Vinculo.FavorecidoMotoristaVinculadoHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Vinculo.FavorecidoMotoristaDesvinculadoHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Veiculo.VeiculoCriadoHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Veiculo.VeiculoAtualizadoHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Veiculo.VeiculoRemovidoHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Composicao.ComposicaoCriadaHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Composicao.ComposicaoAtualizadaHandler>();
+    builder.Services.AddScoped<IOutboxMessageHandler, Zenatur.LegacyBridge.Application.OutboxHandlers.Composicao.ComposicaoRemovidaHandler>();
+
     builder.Services.AddHostedService<OutboxPollingWorker>();
 
     var app = builder.Build();
