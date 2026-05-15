@@ -31,7 +31,38 @@ public sealed class GetMinutaByNumeroHandler
         }
 
         _logger.LogInformation("QuerySucceeded minuta numero={Numero} (mock)", numero);
-        return Task.FromResult(Result.Ok(BuildMock(numero)));
+
+        var full = BuildMock(numero);
+        var dto = numero switch
+        {
+            // Favorecido/motorista incompletos: sem dataNascimento + endereço parcial.
+            "654321" => full with
+            {
+                Favorecido = full.Favorecido with
+                {
+                    DataNascimento = null,
+                    Endereco = new MinutaEnderecoDto(
+                        "Rua das Transportadoras", null, null, "Centro",
+                        "Sao Paulo", "SP", null, null),
+                },
+                Motorista = full.Motorista with
+                {
+                    DataNascimento = null,
+                    CnhNumero = null,
+                    CnhCategoria = null,
+                    CnhValidade = null,
+                    RgNumero = null,
+                    RgUf = null,
+                },
+            },
+            // Sem veículo (legado não tem).
+            "456789" => full with { Veiculo = null },
+            // Sem pontos de parada.
+            "987654" => full with { PontosParada = null },
+            _ => full,
+        };
+
+        return Task.FromResult(Result.Ok(dto));
     }
 
     private static MinutaDto BuildMock(string numero) => new(

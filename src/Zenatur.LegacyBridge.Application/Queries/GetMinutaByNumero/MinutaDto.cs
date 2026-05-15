@@ -7,11 +7,11 @@ public sealed record MinutaDto(
     string NumeroMinuta,
     MinutaFavorecidoDto Favorecido,
     MinutaMotoristaDto Motorista,
-    MinutaVeiculoDto Veiculo,
+    MinutaVeiculoDto? Veiculo,
     IReadOnlyList<MinutaDocumentoDto> Documentos,
     MinutaLocalDto Origem,
     MinutaLocalDto Destino,
-    IReadOnlyList<MinutaPontoParadaDto> PontosParada,
+    IReadOnlyList<MinutaPontoParadaDto>? PontosParada,
     decimal? ValorFreteLegado);
 
 public sealed record MinutaMetaDto(
