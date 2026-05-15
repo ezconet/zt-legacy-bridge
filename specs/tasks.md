@@ -103,8 +103,8 @@
 
 ## Fase 8 — Operação (Windows Service + Deploy)
 
-- [ ] **L41** — `install-service.ps1`: `sc.exe create ZenaturLegacyBridge binPath= ... start= auto` + `sc.exe failure ... reset= 86400 actions= restart/60000/restart/60000/restart/60000`.
-- [ ] **L42** — `uninstall-service.ps1` + `restart-service.ps1`.
+- [x] **L41** — `install-service.ps1`: `sc.exe create ZenaturLegacyBridge binPath= ... start= auto` + `sc.exe failure ... reset= 86400 actions= restart/60000/restart/60000/restart/60000`. (em `ops/`; publica Release + cria/recria serviço + failure actions + start; exige admin)
+- [x] **L42** — `uninstall-service.ps1` + `restart-service.ps1`. (em `ops/`)
 - [ ] **L43** — Runbook `OPERATIONS.md`: como replay de `Failed` (SQL update), troubleshooting comum, leitura de log JSON, métricas extraíveis.
 - [ ] **L44** — README do repo: pré-reqs, build, run local, run como service, configuração env vars.
 
