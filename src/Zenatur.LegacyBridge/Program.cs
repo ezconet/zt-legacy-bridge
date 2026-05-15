@@ -7,6 +7,7 @@ using Zenatur.LegacyBridge.Application.Common;
 using Zenatur.LegacyBridge.Application.Dispatching;
 using Zenatur.LegacyBridge.Application.OutboxHandlers.CiotEmitido;
 using Zenatur.LegacyBridge.Application.Ports;
+using Zenatur.LegacyBridge.Application.Queries.GetMinutaByNumero;
 using Zenatur.LegacyBridge.Application.Queries.GetMotoristaByCpf;
 using Zenatur.LegacyBridge.Application.Queries.GetVeiculoByPlaca;
 using Zenatur.LegacyBridge.Endpoints;
@@ -66,6 +67,7 @@ try
             tags: new[] { "ready" });
     builder.Services.AddScoped<GetMotoristaByCpfHandler>();
     builder.Services.AddScoped<GetVeiculoByPlacaHandler>();
+    builder.Services.AddScoped<GetMinutaByNumeroHandler>();
 
     builder.Services.AddScoped<IOutboxDispatcher, OutboxDispatcher>();
     builder.Services.AddScoped<IOutboxMessageHandler, CiotEmitidoHandler>();
@@ -117,6 +119,7 @@ try
 
     app.MapMotoristasEndpoints();
     app.MapVeiculosEndpoints();
+    app.MapMinutasEndpoints();
 
     if (app.Environment.IsEnvironment("Testing"))
     {
