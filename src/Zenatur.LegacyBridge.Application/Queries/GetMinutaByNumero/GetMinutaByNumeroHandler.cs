@@ -52,7 +52,7 @@ public sealed class GetMinutaByNumeroHandler
             }),
         NumeroMinuta: numero,
         Favorecido: new MinutaFavorecidoDto(
-            Documento: "37420761833",
+            Documento: "13294646720",
             DocumentoTipo: 2,
             Nome: "JOAO MOTORISTA TAC",
             DataNascimento: new DateOnly(1985, 3, 12),
@@ -63,7 +63,7 @@ public sealed class GetMinutaByNumeroHandler
                 "Rua das Transportadoras", "100", "Galpao 3", "Centro",
                 "Sao Paulo", "SP", "01001000", 3550308)),
         Motorista: new MinutaMotoristaDto(
-            Cpf: "37420761833",
+            Cpf: "13294646720",
             Nome: "JOAO MOTORISTA TAC",
             DataNascimento: new DateOnly(1985, 3, 12),
             CnhNumero: "01234567890",
