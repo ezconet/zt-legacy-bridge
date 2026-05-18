@@ -95,6 +95,12 @@ try
 
     var app = builder.Build();
 
+    // Publicado sob sub-caminho no IIS/proxy (ex.: /bridge). Sem isto o
+    // roteamento responde só na raiz e dá 404 atrás do prefixo.
+    var pathBase = builder.Configuration["PathBase"];
+    if (!string.IsNullOrWhiteSpace(pathBase))
+        app.UsePathBase(pathBase);
+
     app.UseSerilogRequestLogging(opts =>
     {
         opts.MessageTemplate = "HTTP {RequestMethod} {RequestPathMasked} responded {StatusCode} in {Elapsed:0.0000} ms";
